@@ -1,7 +1,10 @@
 #api 
-/target/
+target/
 .env
 Cargo.lock 
+cert.pem
+key.pem
+nopass.pem
 #ui 
 /node_modules
 advance.rs
