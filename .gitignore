@@ -1,0 +1,8 @@
+#api 
+/target/
+.env
+Cargo.lock 
+#ui 
+/node_modules
+advance.rs
+basics.rs
