@@ -1,4 +1,5 @@
-use actix_web::{ get, App, web::Data, HttpServer, Responder };
+use actix_web::{ middleware::Logger, get, App, web::Data, HttpServer, Responder };
+use actix_cors::Cors;
 
 mod handlers;
 mod models;
@@ -7,6 +8,7 @@ use config::*;
 mod routes;
 use routes::*;
 mod utils;
+mod services;
 
 #[get("/")]
 async fn index() -> impl Responder {
@@ -18,12 +20,26 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
 
-    let database = connect_database().await.expect("Fail to connect database!");
+    let (domain, port, url_database) = read_env();
+
+    let database = connect_database(url_database).await.expect("Fail to connect database!");
     println!("Connection to database established!");
 
-    HttpServer::new(move || {
-        App::new().app_data(Data::new(database.clone())).service(index).configure(api_scope)
+    let server = HttpServer::new(move || {
+        let cors = Cors::default()
+            .allowed_origin_fn(|_origin, _req_head| { true })
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec!["Content-Type"])
+            .max_age(3600);
+        App::new()
+            .wrap(cors)
+            .wrap(Logger::default())
+            .app_data(Data::new(database.clone()))
+            .service(index)
+            .configure(api_scope)
     })
-        .bind("127.0.0.1:8080")?
-        .run().await
+        .bind((domain.clone(), port))?
+        .run();
+
+    server.await
 }
