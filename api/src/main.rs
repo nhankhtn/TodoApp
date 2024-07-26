@@ -20,7 +20,15 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
 
-    let (domain, port, url_database) = read_env();
+    let (domain, port, url_database) = match read_env() {
+        Ok((domain, port, url_database)) => {
+            (domain, port, url_database)
+        },
+        Err(e) => {
+            eprintln!("Error reading environment variables: {}", e);
+            return Ok(());
+        }
+    };
 
     let database = connect_database(url_database).await.expect("Fail to connect database!");
     println!("Connection to database established!");
