@@ -64,6 +64,9 @@
 .btn-action {
   width: var(--default-layout-header-height);
   height: var(--default-layout-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
   color: #fff;
   font-size: 16px;

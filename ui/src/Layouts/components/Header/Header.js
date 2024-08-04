@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 function Header() {
     return (<div className={cx("wrapper")}>
         <div className={cx("right")}>
-            <button title="menu" className={cx("btn-menu")}>
+            <button title="Menu" className={cx("btn-menu")}>
                 <i className={cx("ti-layout-grid3")}></i>
             </button>
             <a className={cx("brand")} href="/">To do</a>
@@ -20,16 +20,16 @@ function Header() {
             </div>
         </div>
         <div className={cx("right")}>
-            <button title="settings" className={cx("btn-action")}>
+            <button title="Settings" className={cx("btn-action")}>
                 <i className={cx("ti-settings")}></i>
             </button>
-            <button title="help" className={cx("btn-action")}>
+            <button title="Help" className={cx("btn-action")}>
                 <i className={cx("ti-help")}></i>
             </button>
-            <button title="announcement" className={cx("btn-action")}>
+            <button title="Announcement" className={cx("btn-action")}>
                 <i className={cx("ti-announcement")}></i>
             </button>
-            <button title="avatar" className={cx("btn-action")}>
+            <button title="Avatar" className={cx("btn-action")}>
                 <div className={cx("wrap-avatar")}>
                     <div className={cx("inner")}>
                         N
