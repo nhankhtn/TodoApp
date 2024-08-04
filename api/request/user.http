@@ -1,0 +1,34 @@
+#Get all user
+GET http://127.0.0.1:8080/api/user/all HTTP/1.1
+content-type: application/json
+
+###
+
+#Get user by emai and password 
+GET http://127.0.0.1:8080/api/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "nguyenvan6@gmail.com",
+    "password": "abc1234"
+}
+
+###
+
+#Create user
+POST http://127.0.0.1:8080/api/user/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "nguyenvan6@gmail.com",
+    "username": "nva6",
+    "password": "abc123",
+    "avatar": ""
+}
+
+###
+
+#Delete user by id
+DELETE  http://127.0.0.1:8080/api/user/5/delete HTTP/1.1
+Content-Type: application/json
+

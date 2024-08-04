@@ -1,14 +1,18 @@
 use serde::Serialize;
+use crate::helpers::string;
 
 #[derive(Serialize)]
-pub struct TypeDbError {
-    pub error: String,
+pub enum TypeDbError {
+    DuplicateEmail,
+    Other(String)
 }
 
 impl TypeDbError {
     pub fn new(error: String) -> TypeDbError {
-        TypeDbError {
-            error,
+        if string::contains_case_insensitive(&error.to_string(), "Duplicate entry") {
+            TypeDbError::DuplicateEmail
+        }else {
+            TypeDbError::Other(error)
         }
     }
 }
