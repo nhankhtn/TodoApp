@@ -1,21 +1,35 @@
-use sqlx::MySqlPool;
+use sqlx::{MySqlPool, Row};
+use std::{convert::TryInto, usize};
 
-use crate::{ utils::TypeDbError, models::Todo };
+use crate::{ models::{user, Todo}, utils::TypeDbError };
 
-pub async fn get_all_todos(db: &MySqlPool, user_id: i32) -> Result<Vec<Todo>, TypeDbError> {
+pub async fn get_all_todos_by_id_user(db: &MySqlPool,limit:usize, offset: usize, user_id: i32) -> Result<(Vec<Todo>,usize), TypeDbError> {
     let result = sqlx
         ::query_as(
             "
             SELECT id, user_id, title, description, created_at
             FROM todos
             WHERE user_id = ? 
+            LIMIT ? OFFSET ?
         "
         )
         .bind(user_id)
+        .bind(limit as i64)
+        .bind(offset as i64)
         .fetch_all(db).await
         .map_err(|e| TypeDbError::new(e.to_string()))?;
 
-    Ok(result)
+    let row = sqlx
+        ::query("
+             SELECT COUNT(*) as count FROM todos WHERE user_id = ? 
+        ")
+        .bind(user_id)
+        .fetch_one(db)
+        .await.map_err(|e| TypeDbError::new(e.to_string()))?;
+    let count: i32 = row.try_get("count").map_err(|e| TypeDbError::new(e.to_string()))?;
+    let total: usize = count.try_into().map_err(|_| TypeDbError::new("Failed to convert count to usize".to_string()))?;
+
+    Ok((result, total))
 }
 
 pub async fn create_todo(

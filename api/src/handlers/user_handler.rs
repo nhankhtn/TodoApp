@@ -12,7 +12,7 @@ pub async fn get_all_users(db: Data<MySqlPool>, query: Query<PaginationParams>) 
         Ok((users, total)) => {
             let json_users: Vec<JsonApiData<UserAttributes>> = users.into_iter()
             .map(|user| JsonApiData {
-                data_type: "user".to_string(),
+                data_type: "users".to_string(),
                 id: user.id.to_string(),
                 attributes: UserAttributes {
                     email: user.email,
