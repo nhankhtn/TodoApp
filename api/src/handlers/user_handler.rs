@@ -1,25 +1,67 @@
-use actix_web::{ web::{ Data, Json, Path }, HttpResponse, Responder };
+use actix_web::{ web::{ Data, Json, Path,Query }, HttpResponse, Responder };
 use sqlx::MySqlPool;
 
-use crate::{ models::{ CreateUser, GetUserByEmailPassword, UpdateUserById }, services::user_service, utils::TypeDbError };
+use crate::{ models::{ CreateUser, GetUserByEmailPassword, JsonApiData, JsonApiResponse, Meta, PaginationParams, UpdateUserById, UserAttributes }
+, services::user_service, utils::TypeDbError };
 
-pub async fn get_all_users(db: Data<MySqlPool>) -> impl Responder {
-    match user_service::get_all_users(&**db).await {
-        Ok(users) => HttpResponse::Ok().json(users),
+pub async fn get_all_users(db: Data<MySqlPool>, query: Query<PaginationParams>) -> impl Responder {
+    let limit = query.limit.unwrap_or(10);
+    let offset = query.offset.unwrap_or(0);
+
+    match user_service::get_all_users(&**db, limit, offset).await {
+        Ok((users, total)) => {
+            let json_users: Vec<JsonApiData<UserAttributes>> = users.into_iter()
+            .map(|user| JsonApiData {
+                data_type: "user".to_string(),
+                id: user.id.to_string(),
+                attributes: UserAttributes {
+                    email: user.email,
+                    username: user.username,
+                    avatar: user.avatar
+                }
+            })
+            .collect();
+
+            HttpResponse::Ok().json(JsonApiResponse{
+                data: json_users, 
+                metadata:Some(Meta {
+                    total, 
+                    limit
+                })
+            })
+        },
         Err(_e) => HttpResponse::InternalServerError().json(_e),
     }
 }
 
 pub async  fn get_user_by_email_and_password(db: Data<MySqlPool>, body: Json<GetUserByEmailPassword>) -> impl Responder {
     match user_service::get_user_by_email_and_password(&**db, &body.email, &body.password).await {
-        Ok(user) => HttpResponse::Ok().json(user),
+        Ok(user) => {
+            let json_user = JsonApiData {
+                data_type: "user".to_string(),
+                id: user.id.to_string(),
+                attributes: UserAttributes {
+                    email: user.email,
+                    username: user.username, 
+                    avatar: user.avatar
+                }
+            };
+
+            HttpResponse::Ok().json(JsonApiResponse{ 
+                data: json_user,
+                metadata: None
+            })
+        },
         Err(_e) => HttpResponse::NotFound().json(_e),
     }
 } 
 
 pub async fn create_user(db: Data<MySqlPool>, body: Json<CreateUser>) -> impl Responder {
     match user_service::create_user(&**db, &body.email, &body.username,&body.password, &body.avatar).await {
-        Ok(user) => HttpResponse::Created().json(user),
+        Ok(user) => HttpResponse::Created().json(JsonApiResponse {
+            data: user, 
+            metadata: None
+        }),
         Err(TypeDbError::DuplicateEmail) => HttpResponse::Conflict().json("Email already exists"),
         Err(TypeDbError::Other(_e)) => HttpResponse::InternalServerError().json(_e),
     }

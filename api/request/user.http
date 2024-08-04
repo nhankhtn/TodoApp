@@ -1,5 +1,5 @@
 #Get all user
-GET http://127.0.0.1:8080/api/user/all HTTP/1.1
+GET http://127.0.0.1:8080/api/user/all?limit=5&offset=2 HTTP/1.1
 content-type: application/json
 
 ###
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "email": "nguyenvan6@gmail.com",
-    "password": "abc1234"
+    "password": "abc123"
 }
 
 ###

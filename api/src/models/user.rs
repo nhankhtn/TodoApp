@@ -9,16 +9,12 @@ pub struct User {
     pub password: String,
     pub avatar: String,
 }
-impl User {
-    pub fn new(id: i32, email: String, username: String,password:String,  avatar: String) -> User {
-        User {
-            id,
-            email,
-            username,
-            password,
-            avatar,
-        }
-    }
+
+#[derive(Serialize, FromRow)]
+pub struct UserAttributes {
+    pub email: String, 
+    pub username: String, 
+    pub avatar: String
 }
 #[derive(Deserialize)]
 pub struct CreateUser {
@@ -26,13 +22,6 @@ pub struct CreateUser {
     pub username: String,
     pub password: String, 
     pub avatar: String,
-}
-#[derive(Serialize, FromRow)]
-pub struct UserResponse {
-    pub id: i32,
-    pub email: String, 
-    pub username: String, 
-    pub avatar: String
 }
 #[derive(Deserialize)]
 pub struct UpdateUserById {
