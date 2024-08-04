@@ -21,7 +21,6 @@ pub struct CreateUser {
     pub email: String,
     pub username: String,
     pub password: String, 
-    pub avatar: String,
 }
 #[derive(Deserialize)]
 pub struct UpdateUserById {

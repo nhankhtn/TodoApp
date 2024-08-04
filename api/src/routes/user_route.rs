@@ -4,9 +4,8 @@ use crate::handlers::user_handler;
 pub fn user_scope() -> Scope {
     web::scope("/user")
         .route("/all", web::get().to(user_handler::get_all_users))
-        .route("/create", web::post().to(user_handler::create_user))
+        .route("/register", web::post().to(user_handler::register_by_email_and_password))
         .route("/{id}/delete", web::delete().to(user_handler::delete_user_by_id))
         .route("/{field}/update", web::patch().to(user_handler::update_user_by_id))
-        .route("/", web::get().to(user_handler::get_user_by_email_and_password))
-        .route("", web::get().to(user_handler::get_user_by_email_and_password))
+        .route("/login", web::get().to(user_handler::login_by_email_and_password))
 }

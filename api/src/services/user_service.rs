@@ -49,7 +49,6 @@ pub async fn create_user(
     email: &str,
     username: &str,
     password: &str,
-    avatar: &str
 ) -> Result<UserAttributes, TypeDbError> {
     let password_hashed = hash(password, DEFAULT_COST).map_err(|e| TypeDbError::new(e.to_string()))?;
 
@@ -61,7 +60,7 @@ pub async fn create_user(
         .bind(email)
         .bind(username)
         .bind(password_hashed)
-        .bind(avatar)
+        .bind("".to_string())
         .execute(db).await
         .map_err(|e| TypeDbError::new(e.to_string()))?;
 
@@ -69,7 +68,7 @@ pub async fn create_user(
         UserAttributes{
            email: email.to_string(),
            username: username.to_string(),
-           avatar: avatar.to_string()
+           avatar: "".to_string()
         }
     )
 }

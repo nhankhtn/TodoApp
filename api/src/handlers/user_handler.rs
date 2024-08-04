@@ -34,7 +34,7 @@ pub async fn get_all_users(db: Data<MySqlPool>, query: Query<PaginationParams>) 
     }
 }
 
-pub async  fn get_user_by_email_and_password(db: Data<MySqlPool>, body: Json<GetUserByEmailPassword>) -> impl Responder {
+pub async  fn login_by_email_and_password(db: Data<MySqlPool>, body: Json<GetUserByEmailPassword>) -> impl Responder {
     match user_service::get_user_by_email_and_password(&**db, &body.email, &body.password).await {
         Ok(user) => {
             let json_user = JsonApiData {
@@ -56,8 +56,8 @@ pub async  fn get_user_by_email_and_password(db: Data<MySqlPool>, body: Json<Get
     }
 } 
 
-pub async fn create_user(db: Data<MySqlPool>, body: Json<CreateUser>) -> impl Responder {
-    match user_service::create_user(&**db, &body.email, &body.username,&body.password, &body.avatar).await {
+pub async fn register_by_email_and_password(db: Data<MySqlPool>, body: Json<CreateUser>) -> impl Responder {
+    match user_service::create_user(&**db, &body.email, &body.username,&body.password).await {
         Ok(user) => HttpResponse::Created().json(JsonApiResponse {
             data: user, 
             metadata: None
