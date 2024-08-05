@@ -1,0 +1,10 @@
+@import "../GlobalStyles/functions";
+
+.wrapper {
+  cursor: pointer;
+  padding: 12px 0;
+  font-size: var(--font-size);
+  color: var(--white);
+  background-color: var(--primary);
+  border-radius: 4px;
+}

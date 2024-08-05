@@ -83,3 +83,39 @@ export const MenuIcon = ({ width = '2.4rem', height = '2.4rem', className }) => 
         </path>
     </svg>
 )
+
+export const RadioIcon = ({ width = '1rem', height = '1rem', className }) => (
+    <svg
+        fill="currentColor"
+        aria-hidden="true"
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z" fill="currentColor">
+        </path>
+    </svg>
+)
+export const RadioCheckedIcon = ({ width = '1rem', height = '1rem', className }) => (
+    <svg
+        fill="currentColor"
+        aria-hidden="true"
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"><path d="M10 2a8 8 0 110 16 8 8 0 010-16zm3.36 5.65a.5.5 0 00-.64-.06l-.07.06L9 11.3 7.35 9.65l-.07-.06a.5.5 0 00-.7.7l.07.07 2 2 .07.06c.17.11.4.11.56 0l.07-.06 4-4 .07-.08a.5.5 0 00-.06-.63z" fill="currentColor"></path>
+    </svg>
+)
+export const CancelIcon = ({ width = '1rem', height = '1rem', className }) => (
+    <svg
+        fill="currentColor"
+        aria-hidden="true"
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 16 16"
+        xmlns="http://www.w3.org/2000/svg"><path d="M2.59 2.72l.06-.07a.5.5 0 01.63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 01.7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 01-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 01-.7-.7L7.29 8 2.65 3.35a.5.5 0 01-.06-.63l.06-.07-.06.07z" fill="currentColor"></path>
+    </svg>
+)

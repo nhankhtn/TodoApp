@@ -1,0 +1,27 @@
+.wrapper-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  margin: 0 8px;
+  border-top: 1px solid var(--separate-color);
+  border-bottom: 1px solid var(--separate-color);
+}
+.btn-check {
+  background-color: transparent;
+  cursor: pointer;
+}
+.heading {
+  margin-left: 4px;
+  width: 180px;
+}
+.desc {
+  flex: 1;
+}
+.completed {
+  text-decoration: line-through;
+}
+.btn-delete-item {
+  background-color: transparent;
+  cursor: pointer;
+  margin-right: 8px;
+}
