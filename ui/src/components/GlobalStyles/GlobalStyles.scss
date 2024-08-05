@@ -10,10 +10,14 @@
   --gray: rgba(22, 24, 35, 0.06);
 
   --font-family: "Roboto", "sans-serif";
+}
 
-  --default-layout-header-height: 48px;
-  --default-layout-width: 1150px;
-  --default-layout-horizontal-spacer: 24px;
+@function rem($pixel) {
+  @if math.is-unitless($pixel) {
+    @return math.div($pixel, 16) + rem;
+  } @else {
+    @error 'Don\'t use units when using the rem() function; only numbers.';
+  }
 }
 
 * {
@@ -77,22 +81,4 @@ input,
 a {
   color: var(--text-color);
   text-decoration: none;
-}
-
-// Custom tippy tooltip
-body {
-  .tippy-box {
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1.6rem;
-    line-height: 2.2rem;
-    background-color: rgba(84 84 84 / 0.92);
-  }
-  .tippy-arrow {
-    color: rgba(84 84 84 / 0.92);
-  }
-
-  .tippy-content {
-    padding: 8px 9px;
-  }
 }
