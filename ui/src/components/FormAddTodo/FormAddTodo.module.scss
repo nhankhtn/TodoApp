@@ -17,8 +17,22 @@
 .form-item input {
   font-size: var(--font-size);
   height: 40px;
+  padding-left: 8px;
   border-radius: 4px;
+}
+.message-error {
+  font-size: rem(12);
+  color: red;
 }
 .btn-submit {
   margin-top: 8px;
+}
+// Theme dark
+.dark input {
+  color: var(--input-color-dark);
+  background-color: var(--input-bg-dark);
+}
+.dark .btn-submit {
+  color: var(--btn-color-dark);
+  background-color: var(--btn-bg-dark);
 }

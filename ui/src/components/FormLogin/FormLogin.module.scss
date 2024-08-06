@@ -1,0 +1,66 @@
+@import "../GlobalStyles/functions";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 12px;
+}
+.heading {
+  font-size: 32px;
+  font-weight: 400;
+  text-align: center;
+}
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+.form-item label {
+  font-size: rem(13);
+}
+.form-item input {
+  font-size: var(--font-size);
+  height: 40px;
+  border-radius: 4px;
+  padding-left: 8px;
+}
+.password-wrapper {
+  position: relative;
+  & input {
+    width: 100%;
+  }
+}
+.toggle-password {
+  position: absolute;
+  top: 4px;
+  font-size: 20px;
+  right: 8px;
+  background-color: transparent;
+}
+.message-error {
+  font-size: rem(12);
+  color: red;
+}
+.btn-submit {
+  margin-top: 8px;
+}
+.loading {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  font-size: 28px;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+// Theme dark
+.wrapper.dark {
+  color: #fff;
+}
