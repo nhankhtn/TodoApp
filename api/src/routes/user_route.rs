@@ -7,5 +7,5 @@ pub fn user_scope() -> Scope {
         .route("/register", web::post().to(user_handler::register_by_email_and_password))
         .route("/{id}/delete", web::delete().to(user_handler::delete_user_by_id))
         .route("/{field}/update", web::patch().to(user_handler::update_user_by_id))
-        .route("/login", web::get().to(user_handler::login_by_email_and_password))
+        .route("/login", web::post().to(user_handler::login_by_email_and_password))
 }
