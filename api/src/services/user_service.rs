@@ -1,10 +1,11 @@
 use bcrypt::{hash, verify, DEFAULT_COST};
+use chrono::{Duration, Utc};
 use sqlx::{MySqlPool, Row};
 use std::convert::TryInto;
 
 use crate::{
-    models::{User, UserAttributes},
-    utils::{MessageError, TypeDbError},
+    models::{Claims, User, UserAttributes},
+    utils::{decode_token, encode_token, MessageError, TypeDbError},
 };
 
 pub async fn get_all_users(
@@ -41,11 +42,11 @@ pub async fn get_all_users(
 
     Ok((result, total))
 }
-pub async fn get_user_by_email_and_password(
+pub async fn generate_token(
     db: &MySqlPool,
     email: &str,
     password: &str,
-) -> Result<User, TypeDbError> {
+) -> Result<String, TypeDbError> {
     let user: User = sqlx::query_as(
         "
             SELECT id, email, username, password, avatar
@@ -59,10 +60,39 @@ pub async fn get_user_by_email_and_password(
     .map_err(|_| TypeDbError::new(MessageError::EMAIL_WRONG.to_string()))?;
 
     if verify(password, &user.password).unwrap_or(false) {
-        Ok(user)
+        // Ok(user)
+        let exp = Duration::hours(100);
+        let claims = Claims::new(user.id, exp);
+        let token = encode_token(claims).map_err(|e| TypeDbError::new(e.to_string()))?;
+        Ok(token)
     } else {
         Err(TypeDbError::new(MessageError::PASSWORD_WRONG.to_string()))
     }
+}
+
+pub async fn auth_token(db: &MySqlPool, token: String) -> Result<UserAttributes, TypeDbError> {
+    let claims =
+        decode_token(token).map_err(|_| TypeDbError::new("Token has error".to_string()))?;
+
+    let current_time = Utc::now().timestamp() as usize;
+    if claims.exp < current_time {
+        return Err(TypeDbError::new("Token has expired".to_string()));
+    }
+
+    let user_id = claims.sub;
+    let user = sqlx::query_as(
+        "
+            SELECT email, username, avatar
+            FROM users
+            WHERE id = ?
+        ",
+    )
+    .bind(user_id)
+    .fetch_one(db)
+    .await
+    .map_err(|_| TypeDbError::new("Token is invalid".to_string()))?;
+
+    Ok(user)
 }
 pub async fn create_user(
     db: &MySqlPool,

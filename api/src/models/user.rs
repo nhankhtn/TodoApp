@@ -1,4 +1,4 @@
-use serde::{ Deserialize, Serialize };
+use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
 #[derive(Debug, Deserialize, Serialize, FromRow)]
@@ -10,17 +10,17 @@ pub struct User {
     pub avatar: String,
 }
 
-#[derive(Serialize, FromRow)]
+#[derive(Serialize, FromRow, Deserialize)]
 pub struct UserAttributes {
-    pub email: String, 
-    pub username: String, 
-    pub avatar: String
+    pub email: String,
+    pub username: String,
+    pub avatar: String,
 }
 #[derive(Deserialize)]
 pub struct CreateUser {
     pub email: String,
     pub username: String,
-    pub password: String, 
+    pub password: String,
 }
 #[derive(Deserialize)]
 pub struct UpdateUserById {
@@ -28,7 +28,7 @@ pub struct UpdateUserById {
     pub value: String,
 }
 #[derive(Deserialize)]
-pub  struct  GetUserByEmailPassword{
+pub struct GetUserByEmailPassword {
     pub email: String,
-    pub password: String
+    pub password: String,
 }
