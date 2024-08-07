@@ -30,7 +30,7 @@ function Button({
             }
         });
     }
-    console.log(className);
+
     const dynamicClass = className.split(' ');
     const classes = cx("wrapper", ...dynamicClass, {
         disabled

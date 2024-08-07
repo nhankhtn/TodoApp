@@ -20,7 +20,7 @@ function Background() {
                 type="button"
                 title="Change theme"
                 className={cx("theme-btn")}
-                onClick={e => dispatch(actions.setTheme(!theme.isDarkMode))}
+                onClick={e => dispatch(actions.setTheme({ isDarkMode: !theme.isDarkMode }))}
             >
                 {theme.isDarkMode ?
                     <LightIcon className={cx("theme-icon")} /> :

@@ -6,8 +6,8 @@ import { useState } from "react";
 import styles from "./FormLogin.module.scss";
 import Button from "../Button";
 import { useFormInput } from "~/hooks/useFormInput";
-import { isValidEmail, post } from "~/utils";
-import { useNavigate } from "react-router-dom";
+import { actions, useStore } from "~/store";
+import { useLogin } from "~/hooks/useLogin";
 
 
 const cx = classNames.bind(styles);
@@ -16,35 +16,13 @@ const cx = classNames.bind(styles);
 function FormLogin({ className }) {
     const emailInput = useFormInput('');
     const passwordInput = useFormInput('');
-    const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const [state, dispatch] = useStore();
+    const { handleLogin, isLoading, error } = useLogin();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!emailInput.props.value || !passwordInput.props.value) {
-            setError("Please fill in all fields!");
-            return;
-        }
-        if (!isValidEmail(emailInput.props.value)) {
-            setError("Email invalid!");
-            return;
-        }
-        setLoading(true);
-
-        const resp = await post("user/login", {
-            email: emailInput.props.value.trim(),
-            password: passwordInput.props.value.trim()
-        });
-        setLoading(false);
-        if (!resp.ok) {
-            setError(resp.result);
-            return;
-        }
-
-        setError('');
-        navigate('/');
+        handleLogin(emailInput.props.value, passwordInput.props.value);
     }
 
     return (<form className={cx("wrapper", className)}>

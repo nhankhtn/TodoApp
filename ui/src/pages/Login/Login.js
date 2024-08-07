@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 
 
 function Login() {
-    const [state, dispacth] = useStore();
+    const [state, dispatch] = useStore();
     const { theme } = state;
 
     return (<div className={cx("container")}>

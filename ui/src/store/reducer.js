@@ -1,4 +1,4 @@
-import { SET_THEME } from "~/constants";
+import { LOG_IN, SET_THEME } from "~/constants";
 
 const initState = {
     theme: { isDarkMode: false },
@@ -10,9 +10,12 @@ function reducer(state, action) {
         case SET_THEME:
             return {
                 ...state,
-                theme: {
-                    isDarkMode: action.payload
-                }
+                theme: action.payload
+            }
+        case LOG_IN:
+            return {
+                ...state,
+                user: action.payload
             }
         default:
             return state;
