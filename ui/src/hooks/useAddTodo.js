@@ -18,10 +18,23 @@ export function useAddTodo() {
             setError(`You need log in to add more than ${MAX_FREE_TODOS} todos!`);
             return;
         }
+        if (!isAuthenticated) {
+            const newTodo = {
+                id: state.todos[state.todos.length - 1]?.id + 1 || 1,
+                title,
+                description: desc,
+                is_completed: false,
+                created_at: Date.now()
+            }
+            dispatch(actions.addTodo(newTodo))
+            setError('');
+            return;
+        }
+
         try {
             setIsLoading(true);
             const resp = await post(`todo/create/${state.user.id}`, {
-                title: title,
+                title,
                 description: desc,
             });
             if (!resp.ok) {

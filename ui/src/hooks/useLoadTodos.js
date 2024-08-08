@@ -7,8 +7,8 @@ export function useLoadTodos() {
     const [state, dispatch] = useStore();
 
     useEffect(() => {
-        try {
-            const loadTodos = async () => {
+        const loadTodos = async () => {
+            try {
                 const resp = await get(`todo/all/${state.user?.id || 0}`);
                 if (!resp.ok) {
                     console.log(resp);
@@ -16,10 +16,12 @@ export function useLoadTodos() {
                 }
                 const todos = resp.result.data;
                 dispatch(actions.loadTodos(todos))
+
+            } catch (error) {
+                console.log(error);
             }
-            loadTodos();
-        } catch (error) {
-            console.log(error);
         }
+        loadTodos();
+
     }, [dispatch, state.user])
 }

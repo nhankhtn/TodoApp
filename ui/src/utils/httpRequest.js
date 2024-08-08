@@ -41,3 +41,35 @@ export async function post(url, data) {
         throw err;
     }
 }
+export async function patch(url, data) {
+    try {
+        const resp = await fetch(`${BASE_URL_API}/${url}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        const ok = resp.ok;
+        const statusCode = resp.status;
+
+        return { ok, statusCode };
+    }
+    catch (err) {
+        throw err;
+    }
+}
+
+export async function _delete(url) {
+    try {
+        const resp = await fetch(`${BASE_URL_API}/${url}`, {
+            method: 'DELETE',
+        })
+        const ok = resp.ok;
+        const statusCode = resp.status;
+        return { ok, statusCode };
+    }
+    catch (err) {
+        throw err;
+    }
+}

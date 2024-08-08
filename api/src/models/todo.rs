@@ -41,15 +41,11 @@ pub struct DeleteTodo {
 }
 #[derive(Deserialize)]
 pub struct UpdateTodo {
-    pub id: i32,
     pub user_id: i32,
+    pub id: i32,
     pub field: String,
 }
 #[derive(Deserialize)]
 pub struct UpdateTodoBody {
     pub value: String,
-}
-#[derive(Deserialize)]
-pub struct MarkCompleted {
-    pub value: bool,
 }

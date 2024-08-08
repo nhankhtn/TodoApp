@@ -1,10 +1,7 @@
 use sqlx::{MySqlPool, Row};
 use std::{convert::TryInto, usize};
 
-use crate::{
-    models::{user, Todo},
-    utils::TypeDbError,
-};
+use crate::{models::Todo, utils::TypeDbError};
 
 pub async fn get_all_todos_by_id_user(
     db: &MySqlPool,
@@ -106,20 +103,36 @@ pub async fn update_todo(
     field: &str,
     value: &str,
 ) -> Result<(), TypeDbError> {
-    let query = match field {
-        "title" => "UPDATE todos SET title = ? WHERE id = ? AND user_id = ?",
-        "description" => "UPDATE todos SET description = ? WHERE id = ? AND user_id = ?",
-        _ => {
-            return Err(TypeDbError::new("Invalid field!".to_string()));
+    match field {
+        "title" => {
+            sqlx::query("UPDATE todos SET title = ? WHERE id = ? AND user_id = ?")
+                .bind(value)
+                .bind(id)
+                .bind(user_id)
+                .execute(db)
+                .await
+                .map_err(|e| TypeDbError::new(e.to_string()))?;
         }
+        "description" => {
+            sqlx::query("UPDATE todos SET description = ? WHERE id = ? AND user_id = ?")
+                .bind(value)
+                .bind(id)
+                .bind(user_id)
+                .execute(db)
+                .await
+                .map_err(|e| TypeDbError::new(e.to_string()))?;
+        }
+        "is_completed" => {
+            let is_completed: i32 = if value == "1" { 1 } else { 0 };
+            sqlx::query("UPDATE todos SET is_completed = ? WHERE id = ? AND user_id = ?")
+                .bind(is_completed)
+                .bind(id)
+                .bind(user_id)
+                .execute(db)
+                .await
+                .map_err(|e| TypeDbError::new(e.to_string()))?;
+        }
+        _ => return Err(TypeDbError::new("Invalid field".to_string())),
     };
-
-    sqlx::query(query)
-        .bind(value)
-        .bind(id)
-        .bind(user_id)
-        .execute(db)
-        .await
-        .map_err(|e| TypeDbError::new(e.to_string()))?;
     Ok(())
 }
