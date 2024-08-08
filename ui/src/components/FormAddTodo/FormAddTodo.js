@@ -3,9 +3,9 @@ import classNames from "classnames/bind";
 import styles from "./FormAddTodo.module.scss";
 import Button from "../Button";
 import { useFormInput } from "~/hooks/useFormInput";
-import { useState } from "react";
-import { MAX_FREE_TODOS } from "~/constants";
-import { actions, useStore } from "~/store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useAddTodo } from "~/hooks/useAddTodo";
 
 const cx = classNames.bind(styles);
 
@@ -13,32 +13,13 @@ const cx = classNames.bind(styles);
 function FormAddTodo({ isAuthenticated, className }) {
     const titleInput = useFormInput("");
     const descInput = useFormInput("");
-    const [error, setError] = useState('');
-    const [state, dispatch] = useStore();
+    const { isLoading, error, addTodo } = useAddTodo();
 
-    const handleAddTodo = (e) => {
+    const handleAddTodo = async (e) => {
         e.preventDefault();
-        if (!titleInput.props.value) {
-            setError("The title field cannot be empty!");
-            return;
-        }
-        if (state.todos.length === MAX_FREE_TODOS && !isAuthenticated) {
-            setError(`You need log in to add more than ${MAX_FREE_TODOS} todos!`);
-            return;
-        }
-
-        const newTodo = {
-            id: state.todos[state.todos.length - 1].id + 1,
-            title: titleInput.props.value,
-            description: descInput.props.value,
-            isCompleted: false,
-            createdAt: new Date().toLocaleString()
-        };
-        dispatch(actions.addTodo(newTodo))
+        addTodo(titleInput.props.value.trim(), descInput.props.value.trim(), isAuthenticated);
         titleInput.setValue('');
         descInput.setValue('');
-        setError('');
-
     }
 
     return (<form className={cx("wrapper", className)}>
@@ -55,6 +36,7 @@ function FormAddTodo({ isAuthenticated, className }) {
         <Button type="submit" title="Add todo" className={cx("btn-submit")} onClick={handleAddTodo}>
             Add to list
         </Button>
+        {isLoading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
     </form>);
 }
 

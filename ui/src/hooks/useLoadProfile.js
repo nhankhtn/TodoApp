@@ -14,16 +14,16 @@ export function useLoadProfile() {
         const loadProfile = async () => {
             try {
                 const resp = await get('user/auth');
-                timeoutId = setTimeout(() => setIsLoading(false), 1000);
                 if (!resp.ok) {
                     console.log(resp);
                     return;
                 }
-
-                const user = resp.result;
+                const user = resp.result.data;
                 dispatch(actions.setProfileUser(user));
             } catch (err) {
                 console.log(err);
+            } finally {
+                timeoutId = setTimeout(() => setIsLoading(false), 1000);
             }
         }
         loadProfile();

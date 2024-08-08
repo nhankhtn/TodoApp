@@ -3,6 +3,7 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .heading {
   font-size: var(--font-size);
@@ -26,6 +27,22 @@
 }
 .btn-submit {
   margin-top: 8px;
+}
+.loading {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  font-size: 28px;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
 }
 // Theme dark
 .dark input {

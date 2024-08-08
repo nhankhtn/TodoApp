@@ -24,7 +24,6 @@ export function useLogin() {
                 email,
                 password
             });
-            setLoading(false);
 
             if (!resp.ok) {
                 setError(resp.result);
@@ -36,6 +35,7 @@ export function useLogin() {
             navigate('/');
         } catch (err) {
             setError("Error! Please try again later.");
+        } finally {
             setLoading(false);
         }
     };
