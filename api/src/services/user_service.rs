@@ -70,7 +70,10 @@ pub async fn generate_token(
     }
 }
 
-pub async fn auth_token(db: &MySqlPool, token: String) -> Result<UserAttributes, TypeDbError> {
+pub async fn auth_token(
+    db: &MySqlPool,
+    token: String,
+) -> Result< UserAttributes, TypeDbError> {
     let claims =
         decode_token(token).map_err(|_| TypeDbError::new("Token has error".to_string()))?;
 
@@ -80,9 +83,9 @@ pub async fn auth_token(db: &MySqlPool, token: String) -> Result<UserAttributes,
     }
 
     let user_id = claims.sub;
-    let user = sqlx::query_as(
+    let user: UserAttributes = sqlx::query_as(
         "
-            SELECT email, username, avatar
+            SELECT id,  email, username, avatar
             FROM users
             WHERE id = ?
         ",

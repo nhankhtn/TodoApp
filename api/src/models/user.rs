@@ -12,6 +12,7 @@ pub struct User {
 
 #[derive(Serialize, FromRow, Deserialize)]
 pub struct UserAttributes {
+    pub id: i32,
     pub email: String,
     pub username: String,
     pub avatar: String,

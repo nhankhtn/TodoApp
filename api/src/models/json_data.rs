@@ -6,13 +6,6 @@ pub struct JsonApiResponse<T>{
    pub metadata: Option<Meta>
 }
 
-#[derive(Serialize)]
-pub struct JsonApiData<T> {
-    #[serde(rename="type")]
-    pub data_type: String, 
-    pub id: String, 
-    pub attributes: T
-}
 
 #[derive(Serialize)]
 pub struct Meta { 

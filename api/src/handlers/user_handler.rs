@@ -6,7 +6,7 @@ use sqlx::MySqlPool;
 
 use crate::{
     models::{
-        CreateUser, GetUserByEmailPassword, JsonApiData, JsonApiResponse, Meta, PaginationParams,
+        CreateUser, GetUserByEmailPassword, JsonApiResponse, Meta, PaginationParams,
         Token, UpdateUserById, UserAttributes,
     },
     services::{auth_token, user_service},
@@ -19,21 +19,8 @@ pub async fn get_all_users(db: Data<MySqlPool>, query: Query<PaginationParams>) 
 
     match user_service::get_all_users(&**db, limit, offset).await {
         Ok((users, total)) => {
-            let json_users: Vec<JsonApiData<UserAttributes>> = users
-                .into_iter()
-                .map(|user| JsonApiData {
-                    data_type: "users".to_string(),
-                    id: user.id.to_string(),
-                    attributes: UserAttributes {
-                        email: user.email,
-                        username: user.username,
-                        avatar: user.avatar,
-                    },
-                })
-                .collect();
-
             HttpResponse::Ok().json(JsonApiResponse {
-                data: json_users,
+                data: users,
                 metadata: Some(Meta { total, limit }),
             })
         }
@@ -55,7 +42,10 @@ pub async fn login_by_email_and_password(
 pub async fn authorization_user(db: Data<MySqlPool>, req: HttpRequest) -> impl Responder {
     match get_token_from_req(req) {
         Ok(token) => match auth_token(&**db, token).await {
-            Ok(user) => HttpResponse::Ok().json(user),
+            Ok( user) => HttpResponse::Ok().json(JsonApiResponse {
+                data: user, 
+                metadata: None
+            }),
             Err(_e) => HttpResponse::NotFound().json(_e),
         },
         Err(_e) => HttpResponse::BadRequest().json(_e),
