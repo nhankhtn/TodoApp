@@ -1,58 +1,25 @@
 import classNames from "classnames/bind";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./FormRegister.module.scss";
 import Button from "../Button";
 import { useFormInput } from "~/hooks/useFormInput";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { isValidEmail, post } from "~/utils";
-import { useNavigate } from "react-router-dom";
-
+import { useRegister } from "~/hooks/useRegister";
 
 const cx = classNames.bind(styles);
-
 
 function FormRegister({ className }) {
     const emailInput = useFormInput('');
     const usernameInput = useFormInput('');
     const passwordInput = useFormInput('');
-    const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setLoading] = useState(false);
-    const navigate = useNavigate();
-
+    const { handleRegister, isLoading, error } = useRegister();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!emailInput.props.value || !usernameInput.props.value || !passwordInput.props.value) {
-            setError("Please fill in all fields!");
-            return;
-        }
-        if (!isValidEmail(emailInput.props.value)) {
-            setError("Email is invalid!");
-            return;
-        }
-        if (passwordInput.props.value.trim().length < 6) {
-            setError("Password is too short!");
-            return;
-        }
-        setLoading(true);
-
-        const resp = await post("user/register", {
-            username: usernameInput.props.value.trim(),
-            email: emailInput.props.value.trim(),
-            password: passwordInput.props.value.trim()
-        });
-        setLoading(false);
-        console.log(resp);
-        if (!resp.ok) {
-            setError(resp.result);
-            return;
-        }
-
-        setError('');
-        navigate('/');
+        handleRegister(emailInput.props.value.trim(), usernameInput.props.value.trim(), passwordInput.props.value.trim());
     }
 
     return (<form className={cx("wrapper", className)}>

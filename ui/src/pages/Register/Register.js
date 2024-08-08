@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 
 
 function Register() {
-    const [state, dispacth] = useStore();
+    const [state, dispatch] = useStore();
     const { theme } = state;
 
     return (<div className={cx("container")}>

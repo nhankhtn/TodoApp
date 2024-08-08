@@ -6,7 +6,6 @@ import { useState } from "react";
 import styles from "./FormLogin.module.scss";
 import Button from "../Button";
 import { useFormInput } from "~/hooks/useFormInput";
-import { actions, useStore } from "~/store";
 import { useLogin } from "~/hooks/useLogin";
 
 
@@ -17,12 +16,11 @@ function FormLogin({ className }) {
     const emailInput = useFormInput('');
     const passwordInput = useFormInput('');
     const [showPassword, setShowPassword] = useState(false);
-    const [state, dispatch] = useStore();
     const { handleLogin, isLoading, error } = useLogin();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        handleLogin(emailInput.props.value, passwordInput.props.value);
+        handleLogin(emailInput.props.value.trim(), passwordInput.props.value.trim());
     }
 
     return (<form className={cx("wrapper", className)}>

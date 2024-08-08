@@ -1,31 +1,35 @@
-// hooks/useLogin.js
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { isValidEmail, post } from '~/utils';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { isValidEmail, post } from "~/utils";
 
-export function useLogin() {
-    const [isLoading, setLoading] = useState(false);
+
+export function useRegister() {
     const [error, setError] = useState('');
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async (email, password) => {
-        if (!email || !password) {
+    const handleRegister = async (email, username, password) => {
+        if (!email || !username || !password) {
             setError("Please fill in all fields!");
             return;
         }
         if (!isValidEmail(email)) {
-            setError("Email invalid!");
+            setError("Email is invalid!");
+            return;
+        }
+        if (password.length < 6) {
+            setError("Password is too short!");
             return;
         }
         setLoading(true);
 
         try {
-            const resp = await post("user/login", {
+            const resp = await post("user/register", {
+                username,
                 email,
                 password
             });
             setLoading(false);
-
             if (!resp.ok) {
                 setError(resp.result);
                 return;
@@ -38,10 +42,9 @@ export function useLogin() {
             setError("Error! Please try again later.");
             setLoading(false);
         }
-    };
-
+    }
     return {
-        handleLogin,
+        handleRegister,
         isLoading,
         error,
     };

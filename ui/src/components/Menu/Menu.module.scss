@@ -1,0 +1,25 @@
+.wrapper {
+  width: 200px;
+  min-height: 92px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+}
+.menu-item-btn {
+  background-color: transparent;
+  color: #000;
+  border-bottom: 1px solid #333;
+  &:last-child {
+    border: none;
+  }
+}
+.wrapper.dark {
+  background-color: #3c4058;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  & .menu-item-btn {
+    color: #fff;
+  }
+}

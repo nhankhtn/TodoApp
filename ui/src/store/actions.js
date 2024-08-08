@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, SET_THEME } from "~/constants";
+import { ADD_TODO, DELETE_TODO, LOG_IN, LOG_OUT, MARK_COMPLETED, MARK_UNCOMPLETED, SET_THEME } from "~/constants";
 
 export const setTheme = payload => {
     localStorage.setItem('theme_x-todo', JSON.stringify(payload));
@@ -13,7 +13,23 @@ export const setProfileUser = payload => ({
     payload
 })
 
-export const deleteProfileUser = payload => ({
+export const deleteProfileUser = () => ({
     type: LOG_OUT,
+    payload: null
+})
+export const addTodo = payload => ({
+    type: ADD_TODO,
+    payload
+})
+export const deleteTodo = payload => ({
+    type: DELETE_TODO,
+    payload
+})
+export const markCompleted = payload => ({
+    type: MARK_COMPLETED,
+    payload
+})
+export const markUncompleted = payload => ({
+    type: MARK_UNCOMPLETED,
     payload
 })

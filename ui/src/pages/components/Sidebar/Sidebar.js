@@ -1,49 +1,50 @@
 import classNames from "classnames/bind";
+import Tippy from "@tippyjs/react/headless";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./Sidebar.module.scss";
 import FormAddTodo from "../../../components/FormAddTodo";
 import Button from "../../../components/Button";
 import { actions, useStore } from "~/store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HumanIcon } from "~/components/Icons";
-import { faSpinner, faUser } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
 import { get } from "~/utils";
+import Menu from "~/components/Menu";
+import { useLoadProfile } from "~/hooks/useLoadProfile";
+
 
 const cx = classNames.bind(styles);
 
-function Sidebar({ todos, setTodos }) {
+function Sidebar() {
     const [state, dispatch] = useStore();
     const { theme } = state;
-    const [isLoading, setIsLoading] = useState(true);
+    const { isLoading } = useLoadProfile();
 
-    useEffect(() => {
-        let timeoutId;
-        const loadProfile = async () => {
-            try {
-                const resp = await get('user/auth');
-                timeoutId = setTimeout(() => setIsLoading(false), 1000);
-                if (!resp.ok) {
-                    console.log(resp);
-                    return;
-                }
+    const handleLogout = () => {
+        dispatch(actions.deleteProfileUser());
+        localStorage.removeItem("token-auth_x-todo");
+    }
 
-                const user = resp.result;
-                dispatch(actions.setProfileUser(user));
-            } catch (err) {
-                console.log(err);
-            }
+    const items = [
+        {
+            title: "Upload avatar",
+            action: () => { console.log("Upload avatar"); }
+        },
+        {
+            title: "Log out",
+            action: handleLogout
         }
-        loadProfile();
+    ]
 
-        return clearTimeout(timeoutId);
-    }, [])
+    const showMenu = (attrs) => (
+        <div className="settings" tabIndex="-1" {...attrs}>
+            <Menu items={items} className={{ dark: theme.isDarkMode }} />
+        </div>
+    )
 
     return (<aside className={cx("wrapper")}>
         <FormAddTodo
             className={{ dark: theme.isDarkMode }}
-            todos={todos}
-            setTodos={setTodos}
             isAuthenticated={state.user !== null}
         />
         <div className={cx("wrapper-account")}>
@@ -52,10 +53,18 @@ function Sidebar({ todos, setTodos }) {
                     {/* <Button className={classNames({ dark: theme.isDarkMode })} title="Log out">
                         Log out
                     </Button> */}
-                    <span className={cx("username")}>Duy Nhan</span>
-                    <button type="button" className={cx("avatar-user")}>
-                        <FontAwesomeIcon icon={faUser} />
-                    </button>
+                    <span className={cx("username")}>{state.user.username}</span>
+                    <Tippy
+                        render={showMenu}
+                        interactive
+                        trigger="click"
+                        appendTo="parent"
+                        offset={[40, 10]}
+                    >
+                        <button type="button" title="Settings" className={cx("avatar-user")}>
+                            <FontAwesomeIcon icon={faUser} />
+                        </button>
+                    </Tippy>
                 </div>
                 :
                 <>

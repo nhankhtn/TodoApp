@@ -4,3 +4,7 @@ export const PATTERN_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const SET_THEME = 'set_theme';
 export const LOG_IN = 'log_in';
 export const LOG_OUT = 'log_out';
+export const ADD_TODO = 'add_todo';
+export const DELETE_TODO = 'delete_todo';
+export const MARK_COMPLETED = 'mark_completed';
+export const MARK_UNCOMPLETED = 'mark_uncompleted';
