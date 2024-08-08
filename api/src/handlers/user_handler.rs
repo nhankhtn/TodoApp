@@ -66,10 +66,7 @@ pub async fn register_by_email_and_password(
     body: Json<CreateUser>,
 ) -> impl Responder {
     match user_service::create_user(&**db, &body.email, &body.username, &body.password).await {
-        Ok(user) => HttpResponse::Created().json(JsonApiResponse {
-            data: user,
-            metadata: None,
-        }),
+        Ok(token) => HttpResponse::Created().json(Token { token }),
         Err(TypeDbError::DuplicateEmail) => HttpResponse::Conflict().json("Email already exists"),
         Err(TypeDbError::Error(_e)) => HttpResponse::InternalServerError().json(_e),
     }

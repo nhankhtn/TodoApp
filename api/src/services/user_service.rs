@@ -99,11 +99,11 @@ pub async fn create_user(
     email: &str,
     username: &str,
     password: &str,
-) -> Result<UserAttributes, TypeDbError> {
+) -> Result<String, TypeDbError> {
     let password_hashed =
         hash(password, DEFAULT_COST).map_err(|e| TypeDbError::new(e.to_string()))?;
 
-    sqlx::query(
+    let result = sqlx::query(
         "
         INSERT INTO users(email, username, password, avatar) VALUES
         (?, ?, ?, ?)  
@@ -117,11 +117,10 @@ pub async fn create_user(
     .await
     .map_err(|e| TypeDbError::new(e.to_string()))?;
 
-    Ok(UserAttributes {
-        email: email.to_string(),
-        username: username.to_string(),
-        avatar: "".to_string(),
-    })
+    let exp = Duration::hours(100);
+    let claims = Claims::new(result.last_insert_id() as i32, exp);
+    let token = encode_token(claims).map_err(|e| TypeDbError::new(e.to_string()))?;
+    Ok(token)
 }
 pub async fn delete_user_by_id(db: &MySqlPool, id: i32) -> Result<(), TypeDbError> {
     sqlx::query("DELETE FROM users WHERE id = ?")
