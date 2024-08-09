@@ -1,11 +1,10 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
 
 import styles from "./Home.module.scss";
 import Background from "~/pages/components/Background";
 import Header from "~/pages/components/Header";
 import Footer from "~/pages/components/Footer";
-import TodoList from "~/pages/components/TodoList";
+import TodoList from "~/components/TodoList";
 import Sidebar from "~/pages/components/Sidebar";
 import { useStore } from "~/store";
 
