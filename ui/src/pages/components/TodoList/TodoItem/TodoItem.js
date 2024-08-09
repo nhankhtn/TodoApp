@@ -10,12 +10,13 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
-function TodoItem({ todo, className }) {
+function TodoItem({ todo, editingTodoId, setEditingTodoId, className }) {
     const [state, dispatch] = useStore();
-    const [showEditTitle, setShowEditTitle] = useState(false);
     const [title, setTitle] = useState(todo.title);
-    const [showEditDesc, setShowEditDesc] = useState(false);
     const [desc, setDesc] = useState(todo.description);
+    const [fieldEditing, setFieldEditing] = useState(null);
+
+    const isEditing = editingTodoId === todo.id;
 
     const time = new Date(todo.created_at);
     const date = `${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
@@ -49,48 +50,47 @@ function TodoItem({ todo, className }) {
 
     const handleUpdateTodo = async () => {
         try {
-            if ((!showEditTitle || title !== todo.trim().title) && (!showEditDesc || desc.trim() !== todo.description)) {
-                const fieldUpdated = showEditTitle ? "title" : "description";
-                const value = showEditTitle ? title.trim() : desc.trim();
+            if (title.trim() !== todo.title || desc.trim() !== todo.description) {
+                const value = fieldEditing === 'title' ? title.trim() : desc.trim();
 
-                await patch(`todo/${todo.user_id}/${todo.id}/${fieldUpdated}/update`, { value });
+                await patch(`todo/${todo.user_id}/${todo.id}/${fieldEditing}/update`, { value });
                 dispatch(actions.updateTodo({
                     user_id: todo.user_id,
                     id: todo.id,
-                    fieldUpdated,
+                    fieldEditing,
                     value
                 }))
             }
         } catch (err) {
             console.log(err);
         } finally {
-            setShowEditTitle(false);
-            setShowEditDesc(false);
+            setEditingTodoId(null);
+            setFieldEditing(null);
         }
     }
-
 
     return (
         <div className={cx("wrapper-item")}>
             <button type="button" title="Check" className={cx("btn-check", className)} onClick={markComplete}>
                 {!todo.is_completed ? <RadioIcon /> : <RadioCheckedIcon />}
             </button>
-            <span onDoubleClick={e => { setShowEditTitle(true); setShowEditDesc(false) }} className={cx("heading", {
-                completed: todo.is_completed
-            })}>
-                {showEditTitle ?
-                    <>
-                        <input onChange={e => setTitle(e.target.value)} value={title} className={cx("input-edit", className)} />
-                        <button type="button" onClick={handleUpdateTodo} className={cx("btn-tick")}><FontAwesomeIcon icon={faCheck} /></button>
-                    </> :
-                    <>{todo.title}</>
-                }
-            </span>
-            <p onDoubleClick={e => { setShowEditDesc(true); setShowEditTitle(false) }} className={cx("desc", {
+            <span onDoubleClick={e => { setEditingTodoId(todo.id); setFieldEditing('title') }} className={cx("heading", {
                 completed: todo.is_completed
             })}>
                 {
-                    showEditDesc ?
+                    isEditing && fieldEditing === 'title' ?
+                        <>
+                            <input onChange={e => setTitle(e.target.value)} value={title} className={cx("input-edit", className)} />
+                            <button type="button" onClick={handleUpdateTodo} className={cx("btn-tick")}><FontAwesomeIcon icon={faCheck} /></button>
+                        </> :
+                        <>{todo.title}</>
+                }
+            </span>
+            <p onDoubleClick={e => { setEditingTodoId(todo.id); setFieldEditing('desc') }} className={cx("desc", {
+                completed: todo.is_completed
+            })}>
+                {
+                    isEditing && fieldEditing === 'desc' ?
                         <>
                             <input onChange={e => setDesc(e.target.value)} value={desc} className={cx("input-edit", className)} />
                             <button type="button" onClick={handleUpdateTodo} className={cx("btn-tick")}><FontAwesomeIcon icon={faCheck} /></button>

@@ -6,3 +6,6 @@ pub use date_format::*;
 
 pub mod login;
 pub use login::*;
+
+pub mod upload_file;
+pub use upload_file::*;

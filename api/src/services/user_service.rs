@@ -70,10 +70,7 @@ pub async fn generate_token(
     }
 }
 
-pub async fn auth_token(
-    db: &MySqlPool,
-    token: String,
-) -> Result< UserAttributes, TypeDbError> {
+pub async fn auth_token(db: &MySqlPool, token: String) -> Result<UserAttributes, TypeDbError> {
     let claims =
         decode_token(token).map_err(|_| TypeDbError::new("Token has error".to_string()))?;
 
@@ -155,6 +152,20 @@ pub async fn update_user_by_id(
         .execute(db)
         .await
         .map_err(|e| TypeDbError::new(e.to_string()))?;
+
+    Ok(())
+}
+pub async fn upload_avatar(db: &MySqlPool, user_id: i32, path: &str) -> Result<(), TypeDbError> {
+    sqlx::query(
+        "
+        UPDATE users SET avatar = ? WHERE id = ? 
+    ",
+    )
+    .bind(path)
+    .bind(user_id)
+    .execute(db)
+    .await
+    .map_err(|e| TypeDbError::new(e.to_string()))?;
 
     Ok(())
 }

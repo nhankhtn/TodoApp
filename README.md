@@ -25,6 +25,7 @@ Route: /user
 /auth : check token and return info of user
 /{id}/delete : delete user
 /{field}/update : update user
+/upload/avatar : upload avatar of user
 
 Route: /todo
 /all/{user_id} : return all todos of user (user_id)

@@ -1,6 +1,7 @@
 use actix_cors::Cors;
+use actix_multipart::form::tempfile::TempFileConfig;
 use actix_web::{
-    dev::Service as _, get, middleware::Logger, web::Data, App, HttpServer, Responder,
+    dev::Service as _, get, middleware::Logger, web::Data, App, HttpResponse, HttpServer, Responder,
 };
 use env_logger::Env;
 use futures_util::future::FutureExt;
@@ -17,12 +18,21 @@ mod utils;
 
 #[get("/")]
 async fn index() -> impl Responder {
-    "Hello world!!!"
+    let html = r#"<html>
+        <head><title>Upload Test</title></head>
+        <body>
+            <form target="/" action="api/user/upload/avatar" method="post" enctype="multipart/form-data">
+                <input type="file" name="file"/>
+                <button type="submit">Submit</button>
+            </form>
+        </body>
+    </html>"#;
+    HttpResponse::Ok().body(html)
 }
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "info");
-    std::env::set_var("RUST_BACKTRACE", "1");
+    // std::env::set_var("RUST_LOG", "info");
+    // std::env::set_var("RUST_BACKTRACE", "1");
     // env_logger::init();
     env_logger::init_from_env(Env::default().default_filter_or("info"));
 
@@ -38,6 +48,8 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Fail to connect database!");
     println!("Connection to database established!");
+
+    std::fs::create_dir_all("./uploads")?;
 
     let server = HttpServer::new(move || {
         let cors = Cors::default()
@@ -57,6 +69,7 @@ async fn main() -> std::io::Result<()> {
                 })
             })
             .app_data(Data::new(database.clone()))
+            .app_data(TempFileConfig::default().directory("./uploads"))
             .service(index)
             .configure(api_scope)
     })
