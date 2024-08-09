@@ -1,5 +1,5 @@
-import { type } from "@testing-library/user-event/dist/type";
-import { ADD_TODO, LOAD_TODOS, DELETE_TODO, LOG_IN, LOG_OUT, SET_THEME, UPDATE_TODO } from "~/constants";
+
+import { ADD_TODO, LOAD_TODOS, DELETE_TODO, LOG_IN, LOG_OUT, SET_THEME, UPDATE_TODO, UPDATE_AVATAR_USER } from "~/constants";
 
 export const setTheme = payload => {
     localStorage.setItem('theme_x-todo', JSON.stringify(payload));
@@ -15,8 +15,11 @@ export const setProfileUser = payload => ({
 })
 
 export const deleteProfileUser = () => ({
-    type: LOG_OUT,
-    payload: null
+    type: LOG_OUT
+})
+export const updateAvatar = payload => ({
+    type: UPDATE_AVATAR_USER,
+    payload
 })
 export const addTodo = payload => ({
     type: ADD_TODO,

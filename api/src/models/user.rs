@@ -33,3 +33,7 @@ pub struct GetUserByEmailPassword {
     pub email: String,
     pub password: String,
 }
+#[derive(Serialize)]
+pub struct AvatarUser {
+    pub avatar: String,
+}

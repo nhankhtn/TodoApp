@@ -4,26 +4,27 @@ use crate::{models::UploadAvatar, utils::TypeDbError};
 
 pub fn get_unique_file_path(path: &Path) -> PathBuf {
     let mut new_path = path.to_path_buf();
+    let path = path.to_path_buf();
     let mut count = 1;
+    let extension = path
+        .extension()
+        .and_then(|ext| ext.to_str())
+        .unwrap_or_default();
+    let file_stem = path
+        .file_stem()
+        .and_then(|stem| stem.to_str())
+        .unwrap_or_default();
 
     while new_path.exists() {
-        let extension = new_path
-            .extension()
-            .unwrap_or_default()
-            .to_str()
-            .unwrap_or_default();
-        let file_stem = new_path
-            .file_stem()
-            .unwrap_or_default()
-            .to_str()
-            .unwrap_or_default();
         let new_file_name = format!("{}({}).{}", file_stem, count, extension);
         new_path.set_file_name(new_file_name);
         count += 1;
     }
+
     new_path
 }
 pub fn upload_file(form: UploadAvatar) -> Result<String, TypeDbError> {
+    let URL_IMAGE: &str = "http://127.0.0.1:8080/api/images";
     let f = form.file;
     let origin_file_name = f
         .file_name
@@ -36,11 +37,17 @@ pub fn upload_file(form: UploadAvatar) -> Result<String, TypeDbError> {
         .persist(&unique_file_path)
         .map_err(|e| TypeDbError::new(e.to_string()))?;
 
-    let path: String = unique_file_path
-        .to_str()
-        .ok_or(TypeDbError::new(
-            "There is error when get name file".to_string(),
-        ))?
-        .to_string();
-    Ok(path)
+    if let Some(file_name) = unique_file_path.file_name() {
+        if let Some(name) = file_name.to_str() {
+            println!("Tên file: {}", name);
+            let path = format!("{}/{}", URL_IMAGE, name);
+            Ok(path)
+        } else {
+            Err(TypeDbError::new(
+                "Can't convert file name to string".to_string(),
+            ))
+        }
+    } else {
+        Err(TypeDbError::new("Can't find file name".to_string()))
+    }
 }

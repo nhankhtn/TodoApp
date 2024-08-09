@@ -23,6 +23,6 @@ pub fn user_scope() -> Scope {
         .route("/auth", web::get().to(user_handler::authorization_user))
         .route(
             "/{user_id}/upload/avatar",
-            web::post().to(user_handler::upload_avatar),
+            web::patch().to(user_handler::upload_avatar),
         )
 }

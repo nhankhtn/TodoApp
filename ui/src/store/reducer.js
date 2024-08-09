@@ -1,4 +1,4 @@
-import { ADD_TODO, DELETE_TODO, LOAD_TODOS, LOG_IN, LOG_OUT, SET_THEME, UPDATE_TODO } from "~/constants";
+import { ADD_TODO, DELETE_TODO, LOAD_TODOS, LOG_IN, LOG_OUT, SET_THEME, UPDATE_AVATAR_USER, UPDATE_TODO } from "~/constants";
 
 const initState = {
     theme: { isDarkMode: false },
@@ -22,6 +22,14 @@ function reducer(state, action) {
             return {
                 ...state,
                 user: null
+            }
+        case UPDATE_AVATAR_USER:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    avatar: action.payload.avatar
+                }
             }
         case ADD_TODO:
             return {

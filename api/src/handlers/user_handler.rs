@@ -1,19 +1,17 @@
 use actix_multipart::form::MultipartForm;
 use actix_web::{
-    http::Error,
     web::{Data, Json, Path, Query},
     HttpRequest, HttpResponse, Responder,
 };
 use sqlx::MySqlPool;
-use std::path;
 
 use crate::{
     models::{
-        user, CreateUser, GetUserByEmailPassword, JsonApiResponse, Meta, PaginationParams, Token,
-        UpdateUserById, UploadAvatar, UserAttributes,
+        AvatarUser, CreateUser, GetUserByEmailPassword, JsonApiResponse, Meta, PaginationParams,
+        Token, UpdateUserById, UploadAvatar,
     },
     services::{auth_token, user_service},
-    utils::{get_token_from_req, get_unique_file_path, upload_file, TypeDbError},
+    utils::{get_token_from_req, upload_file, TypeDbError},
 };
 
 pub async fn get_all_users(db: Data<MySqlPool>, query: Query<PaginationParams>) -> impl Responder {
@@ -96,7 +94,7 @@ pub async fn upload_avatar(
     };
 
     match user_service::upload_avatar(&**db, user_id, path.as_str()).await {
-        Ok(_) => HttpResponse::Ok().finish(),
+        Ok(_) => HttpResponse::Ok().json(AvatarUser { avatar: path }),
         Err(e) => HttpResponse::InternalServerError().json(e),
     }
 }
