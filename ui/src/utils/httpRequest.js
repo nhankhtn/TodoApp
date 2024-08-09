@@ -73,3 +73,19 @@ export async function _delete(url) {
         throw err;
     }
 }
+
+export async function uploadRequest(url, form) {
+    try {
+        const resp = await fetch(`${BASE_URL_API}/${url}`, {
+            method: 'PATCH',
+            body: form
+        })
+        const ok = resp.ok;
+        const statusCode = resp.status;
+        const result = ok ? await resp.json() : {};
+        return { ok, statusCode, result };
+    }
+    catch (err) {
+        throw err;
+    }
+}

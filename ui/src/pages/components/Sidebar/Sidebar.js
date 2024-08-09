@@ -10,8 +10,7 @@ import Button from "../../../components/Button";
 import { actions, useStore } from "~/store";
 import Menu from "~/components/Menu";
 import { useLoadProfile } from "~/hooks/useLoadProfile";
-import images from "~/assets/images";
-
+import { uploadRequest } from "~/utils";
 
 const cx = classNames.bind(styles);
 
@@ -32,20 +31,25 @@ function Sidebar() {
     }
 
     const handleUpload = async (e) => {
-        const file = e.target.files[0];
-        const form = new FormData();
+        try {
+            const file = e.target.files[0];
+            const form = new FormData();
 
-        form.append("file", file);
+            form.append("file", file);
 
-        const resp = await fetch(`http://127.0.0.1:8080/api/user/${state.user.id}/upload/avatar`, {
-            method: "PATCH",
-            body: form
-        });
-        const result = await resp.json();
-        dispatch(actions.updateAvatar({
-            user_id: state.user.id,
-            avatar: result.avatar
-        }))
+            const resp = await uploadRequest(`user/${state.user.id}/upload/avatar`, form);
+
+            if (!resp.ok) {
+                console.log(resp);
+                return;
+            }
+            dispatch(actions.updateAvatar({
+                user_id: state.user.id,
+                avatar: resp.result.avatar
+            }))
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const items = [
