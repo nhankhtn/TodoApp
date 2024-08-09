@@ -1,4 +1,5 @@
-import { ADD_TODO, LOAD_TODOS, DELETE_TODO, LOG_IN, LOG_OUT, MARK_COMPLETED, SET_THEME } from "~/constants";
+import { type } from "@testing-library/user-event/dist/type";
+import { ADD_TODO, LOAD_TODOS, DELETE_TODO, LOG_IN, LOG_OUT, SET_THEME, UPDATE_TODO } from "~/constants";
 
 export const setTheme = payload => {
     localStorage.setItem('theme_x-todo', JSON.stringify(payload));
@@ -29,7 +30,7 @@ export const deleteTodo = payload => ({
     type: DELETE_TODO,
     payload
 })
-export const markCompleted = payload => ({
-    type: MARK_COMPLETED,
+export const updateTodo = payload => ({
+    type: UPDATE_TODO,
     payload
 })

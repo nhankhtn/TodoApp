@@ -6,8 +6,7 @@ use sqlx::MySqlPool;
 
 use crate::{
     models::{
-        CreateTodo, DeleteTodo, JsonApiResponse, Meta, PaginationParams, Todo, UpdateTodo,
-        UpdateTodoBody,
+        CreateTodo, DeleteTodo, JsonApiResponse, Meta, PaginationParams, UpdateTodo, UpdateTodoBody,
     },
     services::todo_service,
 };

@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function TodoList({ className }) {
     const [state, dispatch] = useStore();
     useLoadTodos();
-
+    console.log(state.todos);
     return (<div className={cx("wrapper")}>
         <div className={cx("heading")}>
             <span className={cx("title")}>Title</span>

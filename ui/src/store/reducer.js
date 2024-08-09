@@ -1,4 +1,4 @@
-import { ADD_TODO, DELETE_TODO, LOAD_TODOS, LOG_IN, LOG_OUT, MARK_COMPLETED, SET_THEME } from "~/constants";
+import { ADD_TODO, DELETE_TODO, LOAD_TODOS, LOG_IN, LOG_OUT, SET_THEME, UPDATE_TODO } from "~/constants";
 
 const initState = {
     theme: { isDarkMode: false },
@@ -43,14 +43,14 @@ function reducer(state, action) {
                 ...state,
                 todos: state.todos.filter(todo => todo.user_id !== action.payload.user_id || todo.id !== action.payload.id)
             }
-        case MARK_COMPLETED:
+        case UPDATE_TODO:
             return {
                 ...state,
                 todos: state.todos.map(todo => (
                     todo.user_id === action.payload.user_id && todo.id === action.payload.id ?
                         {
                             ...todo,
-                            is_completed: action.payload.is_completed
+                            [action.payload.fieldUpdated]: action.payload.value
                         }
                         :
                         todo

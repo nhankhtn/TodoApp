@@ -1,8 +1,6 @@
 use chrono::{Duration, Utc};
 use serde::{Deserialize, Serialize};
 
-use super::UserAttributes;
-
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
     pub sub: i32,

@@ -7,4 +7,4 @@ export const LOG_OUT = 'log_out';
 export const ADD_TODO = 'add_todo';
 export const LOAD_TODOS = 'laod_todos';
 export const DELETE_TODO = 'delete_todo';
-export const MARK_COMPLETED = 'mark_completed';
+export const UPDATE_TODO = 'update_todo';
