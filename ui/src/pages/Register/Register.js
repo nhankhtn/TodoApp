@@ -6,6 +6,8 @@ import Footer from "~/pages/components/Footer";
 import FormRegister from "~/components/FormRegister";
 import Button from "~/components/Button";
 import { useStore } from "~/store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 
 const cx = classNames.bind(styles);
@@ -19,7 +21,7 @@ function Register() {
         <Background />
         <Button to={"/"} className={cx("btn-back", {
             dark: theme.isDarkMode
-        })} leftIcon={<i className="ti-angle-left"></i>}>Back</Button>
+        })} leftIcon={<FontAwesomeIcon icon={faChevronLeft} />}>Back</Button>
         <main className={cx("wrapper")}>
             <FormRegister className={{ dark: theme.isDarkMode }} />
         </main>

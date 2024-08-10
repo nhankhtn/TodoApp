@@ -63,3 +63,9 @@
   color: var(--input-color-dark);
   background-color: var(--input-bg-dark);
 }
+
+@media only screen and (max-width: 896px) {
+  .btn-check {
+    padding: 7px;
+  }
+}

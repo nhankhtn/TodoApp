@@ -49,3 +49,11 @@
   border-radius: 0;
   background-color: rgba(0, 0, 0, 0);
 }
+@media only screen and (max-width: 896px) {
+  .title {
+    margin-left: 44px;
+  }
+  .btn-check {
+    padding: 7px;
+  }
+}

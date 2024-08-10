@@ -1,5 +1,6 @@
 @import "normalize.css";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import "./NunitoSansFont.scss";
+
 :root {
   --primary: #fe2c55;
   --black: #000;
@@ -9,7 +10,7 @@
   --gray: rgba(22, 24, 35, 0.06);
   --separate-color: #f1dcdc;
 
-  --font-family: "Roboto", "sans-serif";
+  --font-family: "Nunito Sans", "sans-serif";
   --font-size: 1rem;
   --default-height: 48px;
 

@@ -9,6 +9,18 @@
       name="description"
       content="Web site created using create-react-app"
     />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self' https://cdn.ngrok.com;
+        style-src 'self' 'unsafe-inline';
+        font-src 'self';
+        script-src 'self' https://cdn.ngrok.com 'unsafe-inline' 'unsafe-eval';
+        connect-src 'self' http://127.0.0.1:8080;
+        img-src 'self' http://127.0.0.1:8080;
+      "
+    />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

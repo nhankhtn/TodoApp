@@ -21,7 +21,9 @@ export function useLoadTodos() {
                 console.log(error);
             }
         }
-        loadTodos();
-
+        if (state.user)
+            loadTodos();
+        else
+            dispatch(actions.loadTodos([]))
     }, [dispatch, state.user])
 }

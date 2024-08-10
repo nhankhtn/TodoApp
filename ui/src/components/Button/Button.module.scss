@@ -30,3 +30,8 @@
   color: var(--btn-color-dark);
   background-color: var(--btn-bg-dark);
 }
+@media only screen and (max-width: 896px) {
+  .wrapper {
+    padding: 4px 8px;
+  }
+}

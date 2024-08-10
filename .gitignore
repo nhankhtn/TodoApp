@@ -7,6 +7,7 @@ cert.pem
 key.pem
 nopass.pem
 #ui 
+/build
 /node_modules
 advance.rs
 basics.rs
