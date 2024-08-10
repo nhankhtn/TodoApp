@@ -1,6 +1,6 @@
 use std::path::{self, Path, PathBuf};
 
-use crate::{models::UploadAvatar, utils::TypeDbError};
+use crate::{get_url_api_images_from_env, models::UploadAvatar, utils::TypeDbError};
 
 pub fn get_unique_file_path(path: &Path) -> PathBuf {
     let mut new_path = path.to_path_buf();
@@ -24,7 +24,7 @@ pub fn get_unique_file_path(path: &Path) -> PathBuf {
     new_path
 }
 pub fn upload_file(form: UploadAvatar) -> Result<String, TypeDbError> {
-    let URL_IMAGE: &str = "http://127.0.0.1:8080/api/images";
+    let url_api_images: String = get_url_api_images_from_env();
     let f = form.file;
     let origin_file_name = f
         .file_name
@@ -40,7 +40,7 @@ pub fn upload_file(form: UploadAvatar) -> Result<String, TypeDbError> {
     if let Some(file_name) = unique_file_path.file_name() {
         if let Some(name) = file_name.to_str() {
             println!("Tên file: {}", name);
-            let path = format!("{}/{}", URL_IMAGE, name);
+            let path = format!("{}/{}", url_api_images, name);
             Ok(path)
         } else {
             Err(TypeDbError::new(

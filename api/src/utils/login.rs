@@ -1,23 +1,23 @@
-use crate::models::Claims;
+use crate::{get_key_secret_from_env, models::Claims};
 use actix_web::HttpRequest;
 use jsonwebtoken::{decode, encode, errors, DecodingKey, EncodingKey, Header, Validation};
 
 use super::TypeDbError;
 
 pub fn encode_token(claims: Claims) -> Result<String, errors::Error> {
-    let KEY_SECRET: &str = "YNTLCGJFcjCfTJOFtO5fvZI7ZNfZaFcrp42PUGAe3OA=";
+    let key_secret = get_key_secret_from_env();
     let token: String = encode(
         &Header::default(),
         &claims,
-        &EncodingKey::from_secret(KEY_SECRET.as_ref()),
+        &EncodingKey::from_secret(key_secret.as_str().as_ref()),
     )?;
     Ok(token)
 }
 pub fn decode_token(token: String) -> Result<Claims, errors::Error> {
-    let KEY_SECRET: &str = "YNTLCGJFcjCfTJOFtO5fvZI7ZNfZaFcrp42PUGAe3OA=";
+    let key_secret = get_key_secret_from_env();
     let token: jsonwebtoken::TokenData<Claims> = decode::<Claims>(
         &token,
-        &DecodingKey::from_secret(KEY_SECRET.as_ref()),
+        &DecodingKey::from_secret(key_secret.as_str().as_ref()),
         &Validation::default(),
     )?;
     Ok(token.claims)

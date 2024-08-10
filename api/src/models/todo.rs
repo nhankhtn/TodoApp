@@ -10,25 +10,6 @@ pub struct Todo {
     pub is_completed: bool,
     pub created_at: NaiveDateTime,
 }
-impl Todo {
-    pub fn new(
-        id: i32,
-        user_id: i32,
-        title: String,
-        description: String,
-        is_completed: bool,
-        created_at: chrono::NaiveDateTime,
-    ) -> Todo {
-        Todo {
-            id,
-            user_id,
-            title,
-            description,
-            is_completed,
-            created_at,
-        }
-    }
-}
 #[derive(Deserialize)]
 pub struct CreateTodo {
     pub title: String,
